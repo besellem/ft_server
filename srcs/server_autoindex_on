@@ -1,0 +1,41 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    server_autoindex_on                                :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: besellem <besellem@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/12/09 14:11:24 by besellem          #+#    #+#              #
+#    Updated: 2020/12/09 16:26:56 by besellem         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+server {
+	listen 80;
+	listen [::]:80;
+
+	server_name localhost;
+
+	return 301 https://$server_name$request_uri;
+}
+
+server {
+	listen 443;
+	listen [::]:443;
+
+	root /var/www/localhost;
+	index index.php index.html index.htm;
+
+	server_name localhost;
+
+	autoindex on;
+
+	location / {
+		try_files $uri $uri/ =404;
+	}
+
+	location ~ \.php$ {
+		include snippets/fastcgi-php.conf;
+		fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
+	}
+}
