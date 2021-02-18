@@ -12,8 +12,12 @@
 # **************************************************************************** #
 
 ## START
-mkdir /var/www/localhost
+# Alias
+echo "alias c=clear" >> ~/.bashrc
+echo "alias l='ls -la'" >> ~/.bashrc
 
+# Create localhost folder (where websites will be put on)
+mkdir /var/www/localhost
 
 # Copy & link server config file
 cp server_autoindex_on /etc/nginx/sites-available/localhost
