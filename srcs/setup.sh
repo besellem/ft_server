@@ -14,7 +14,7 @@
 ## START
 # Create localhost folder (where websites will be put on)
 mkdir /var/www/localhost
-mv ./test/ /var/www/localhost/
+mv ./test/* /var/www/localhost/
 
 
 # SSL cert
@@ -32,13 +32,13 @@ ln -s /etc/nginx/sites-available/config /etc/nginx/sites-enabled/
 tar -xf phpMyAdmin-5.0.4-english.tar.gz
 rm phpMyAdmin-5.0.4-english.tar.gz
 mv phpMyAdmin-5.0.4-english phpmyadmin
-mv phpmyadmin /var/www/localhost/test/
+mv phpmyadmin /var/www/localhost/
 
 
 # Extract wordpress & move the folder into /var/www/localhost/
 tar -xf wordpress-5.6.tar.gz
 rm wordpress-5.6.tar.gz
-mv wordpress /var/www/localhost/test/
+mv wordpress /var/www/localhost/
 
 
 # -- Start Services --
