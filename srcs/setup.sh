@@ -12,9 +12,14 @@
 # **************************************************************************** #
 
 ## START
-# Create website folder (where websites will be put on)
+# Grant rights
 mkdir /var/www/website
-mv ./test/* /var/www/website/
+chown -R www-data:www-data /var/www/website/*
+chmod 755 -R /var/www/*
+
+
+# Create website folder (where websites will be put on)
+echo "<?php phpinfo(); ?>" >> /var/www/website/index.php
 
 
 # SSL cert
@@ -42,11 +47,6 @@ rm wordpress-5.6.tar.gz
 mv wordpress /var/www/website/
 
 
-# Grant rights
-chown -R www-data:www-data /var/www/website/*
-chmod -R /var/www/website/*
-
-
 # -- Start Services --
 # MySQL
 service mysql start
@@ -61,19 +61,20 @@ echo "grant all privileges on wordpress.* to 'wordpress'@'127.0.0.1' with grant 
 echo "flush privileges;" | mysql -u root
 
 
-# Check the databases installed
+# Check the database installation
 echo "show databases;" | mysql -u root
 echo "SELECT user FROM mysql.user;" | mysql -u root
 
+
 # PHP
-#service nginx status
-#nginx -t
+# service nginx status
+# nginx -t
 
 
 # Install oh-my-zsh
-# chsh -s $(which zsh)
-# sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-# echo "alias c=clear" >> ~/.zshrc
+chsh -s $(which zsh)
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+echo "alias c=clear" >> ~/.zshrc
 
 
 ## END

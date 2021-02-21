@@ -1,8 +1,8 @@
 server {
 	listen 80;
 	listen [::]:80;
-
 	server_name website;
+	return 301 https://$host$request_uri;
 }
 
 server {
@@ -10,13 +10,14 @@ server {
 	listen 443 ssl;
 	listen [::]:443 ssl;
 
+	server_name website;
+
 	ssl_certificate /etc/nginx/ssl/website.pem;
 	ssl_certificate_key /etc/nginx/ssl/website.key;
+
 	root /var/www/website;
 
 	index index.php index.html index.htm index.nginx-debian.html;
-
-	server_name website;
 
 	location / {
 		try_files $uri $uri/ =404;
