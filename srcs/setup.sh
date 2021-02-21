@@ -12,33 +12,35 @@
 # **************************************************************************** #
 
 ## START
-# Create localhost folder (where websites will be put on)
-mkdir /var/www/localhost
-mv ./test/* /var/www/localhost/
+# Create website folder (where websites will be put on)
+mkdir /var/www/website
+mv ./test/* /var/www/website/
 
 
 # SSL cert
 mkdir /etc/nginx/ssl
-openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/nginx/ssl/localhost.pem -keyout /etc/nginx/ssl/localhost.key -subj "/C=FR/ST=Paris/L=Paris/O=42/OU=ben/CN=localhost"
+openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/nginx/ssl/website.pem -keyout /etc/nginx/ssl/website.key -subj "/C=FR/ST=Paris/L=Paris/O=42/OU=ben/CN=website"
 
 
 # Copy & link server config file
-# cp server_autoindex_on /etc/nginx/sites-available/localhost
+# cp server_autoindex_on /etc/nginx/sites-available/website
+rm /etc/nginx/sites-enabled/default
 mv ./config /etc/nginx/sites-available/
 ln -s /etc/nginx/sites-available/config /etc/nginx/sites-enabled/
+# chown www-data 
 
 
-# Extract phpmyadmin & move the folder into /var/www/localhost/
+# Extract phpmyadmin & move the folder into /var/www/website/
 tar -xf phpMyAdmin-5.0.4-english.tar.gz
 rm phpMyAdmin-5.0.4-english.tar.gz
 mv phpMyAdmin-5.0.4-english phpmyadmin
-mv phpmyadmin /var/www/localhost/
+mv phpmyadmin /var/www/website/
 
 
-# Extract wordpress & move the folder into /var/www/localhost/
+# Extract wordpress & move the folder into /var/www/website/
 tar -xf wordpress-5.6.tar.gz
 rm wordpress-5.6.tar.gz
-mv wordpress /var/www/localhost/
+mv wordpress /var/www/website/
 
 
 # -- Start Services --
@@ -54,29 +56,20 @@ echo "create user 'wordpress'@'127.0.0.1';" | mysql -u root
 echo "SHOW DATABASES;" | mysql -u root
 echo "SELECT user FROM mysql.user;" | mysql -u root
 
-
-# Nginx
-service nginx reload
-service nginx configtest
-service nginx start
-service nginx status
-nginx -t
-
-
 # PHP
 service php7.3-fpm start
-service php7.3-fpm status
+#service php7.3-fpm status
+
+# Nginx
+service nginx start
+#service nginx status
+#nginx -t
 
 
 # Install oh-my-zsh
-chsh -s $(which zsh)
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-echo "alias c=clear" >> ~/.zshrc
-
-
-# Restart services
-service mysql restart
-service php7.3-fpm restart
+# chsh -s $(which zsh)
+# sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+# echo "alias c=clear" >> ~/.zshrc
 
 
 ## END
