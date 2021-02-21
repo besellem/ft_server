@@ -27,7 +27,6 @@ openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/nginx/ssl/
 rm /etc/nginx/sites-enabled/default
 mv ./config /etc/nginx/sites-available/
 ln -s /etc/nginx/sites-available/config /etc/nginx/sites-enabled/
-# chown www-data 
 
 
 # Extract phpmyadmin & move the folder into /var/www/website/
@@ -43,25 +42,30 @@ rm wordpress-5.6.tar.gz
 mv wordpress /var/www/website/
 
 
+# Grant rights
+chown -R www-data:www-data /var/www/website/*
+chmod -R /var/www/website/*
+
+
 # -- Start Services --
 # MySQL
 service mysql start
+service php7.3-fpm start
+service nginx start
 
 
 # Wordpress database config
 echo "create database wordpress;" | mysql -u root
 echo "create user 'wordpress'@'127.0.0.1';" | mysql -u root
+echo "grant all privileges on wordpress.* to 'wordpress'@'127.0.0.1' with grant option;" | mysql -u root
+echo "flush privileges;" | mysql -u root
+
 
 # Check the databases installed
-echo "SHOW DATABASES;" | mysql -u root
+echo "show databases;" | mysql -u root
 echo "SELECT user FROM mysql.user;" | mysql -u root
 
 # PHP
-service php7.3-fpm start
-#service php7.3-fpm status
-
-# Nginx
-service nginx start
 #service nginx status
 #nginx -t
 
