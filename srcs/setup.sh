@@ -14,9 +14,6 @@
 ## START
 mkdir /var/www/website
 
-# Create website folder (where websites will be put on)
-# echo "<?php phpinfo(); ?>" >> /var/www/website/index.php
-
 
 # SSL cert
 mkdir /etc/nginx/ssl
@@ -24,7 +21,6 @@ openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/nginx/ssl/
 
 
 # Copy & link server config file
-# cp server_autoindex_on /etc/nginx/sites-available/website
 rm /etc/nginx/sites-enabled/default
 cp /tmp/config_autoindex_on /etc/nginx/sites-available/config
 ln -s /etc/nginx/sites-available/config /etc/nginx/sites-enabled/
